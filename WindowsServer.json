@@ -1,0 +1,120 @@
+
+{
+  
+  "variables": {
+    "VCPassword": "",
+    "WinRMPassword": ""
+  },
+
+  "sensitive-variables": ["VCPassword", "WinRMPassword"],
+
+    "builders": [
+      {
+        "type": "vsphere-iso",
+  
+        "vcenter_server": "vcsa1.lab.com",
+        "insecure_connection": "true",
+        "username": "administrator@vsphere.local",
+        "password": "{{user `VCPassword`}}",
+        "cluster": "Lab",
+        "host": "esx2.lab.com",
+        
+        "communicator": "winrm",
+        "winrm_username": "Administrator",
+        "winrm_password": "{{user `WinRMPassword`}}",
+
+        "vm_name":  "packerimage",
+        "convert_to_template": "true",
+        "cpus": "2",
+        "ram": "4096",
+        "network": "DPortGroup",
+        "network_card": "vmxnet3",
+        "datastore": "datastore2",
+        "disk_controller_type":  "lsilogic-sas",
+	"guest_os_type": "windows9Server64Guest",
+      "disk_thin_provisioned": true,
+        "disk_size": "32768",
+	"iso_paths": [
+        "[datastore2] ISOs/SW_DVD9_Win_Svr_STD_Core_and_DataCtr_Core_2016_64Bit_English_-3_MLF_X21-30350.ISO",
+        "[datastore2] ISOs/VMware-tools.iso"
+      ],
+      "floppy_files": [
+        "setup/autounattend.xml",
+        "setup/setup.ps1",
+        "setup/vmtools.ps1"
+      ]
+        
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "powershell",
+      "scripts": [ "enable-rdp.bat",
+                  "build.ps1"
+         ]     
+    },
+    {
+      "type": "windows-update",
+      "search_criteria": "IsInstalled=0",
+      "filters": [
+          "exclude:$_.Title -like '*Preview*'",
+          "include:$true"
+        ],
+        "update_limit": 25
+    },
+    {
+      "type": "windows-restart",
+      "restart_timeout": "120m"
+    },
+    {
+      "type": "windows-update",
+      "search_criteria": "IsInstalled=0",
+      "filters": [
+          "exclude:$_.Title -like '*Preview*'",
+          "include:$true"
+        ],
+        "update_limit": 25
+    },
+    {
+      "type": "windows-restart",
+      "restart_timeout": "120m"
+    },
+    {
+      "type": "windows-update",
+      "search_criteria": "IsInstalled=0",
+      "filters": [
+          "exclude:$_.Title -like '*Preview*'",
+          "include:$true"
+        ],
+        "update_limit": 25
+    },
+    {
+      "type": "windows-restart",
+      "restart_timeout": "120m"
+    },
+    {
+      "type": "windows-update",
+      "search_criteria": "IsInstalled=0",
+      "filters": [
+          "exclude:$_.Title -like '*Preview*'",
+          "include:$true"
+        ],
+        "update_limit": 25
+    },
+    {
+      "type": "windows-restart",
+      "restart_timeout": "120m"
+    },
+    {
+      "type": "windows-update",
+      "search_criteria": "IsInstalled=0",
+      "filters": [
+          "exclude:$_.Title -like '*Preview*'",
+          "include:$true"
+        ],
+        "update_limit": 25
+    }
+  ]
+  }
+

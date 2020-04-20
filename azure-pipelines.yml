@@ -1,0 +1,25 @@
+
+
+pool: Default
+
+
+
+steps:
+
+- task: CopyFiles@2
+
+  displayName: 'Copy Packer Files to Artifacts'
+
+  inputs:
+
+    SourceFolder:
+
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    cleanTargetFolder: true
+
+
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    path: '$(Build.ArtifactStagingDirectory)'
+    artifact: PackerConfig
